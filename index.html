@@ -781,15 +781,17 @@
                 const contract = new web3.eth.Contract(contractABI, contractAddress);
 
                 try {
-                    // Call the mint function with the specified mint amount
                     const gasPrice = await web3.eth.getGasPrice();
+                    const costPerToken = web3.utils.toWei("3", "ether"); // Convert 3 ether to wei
+                    const totalCost = costPerToken * mintAmount;
+
                     const data = contract.methods.mint(mintAmount).encodeABI();
                     const tx = await web3.eth.sendTransaction({
                         from: accounts[0],
                         to: contractAddress,
-                        value: mintAmount,
+                        value: totalCost.toString(), // Convert total cost to string
                         gas: 200000, // Adjust the gas limit as needed
-                        gasPrice: gasPrice,
+                        gasPrice: gasPrice.toString(), // Convert gas price to string
                         data: data,
                     });
 
